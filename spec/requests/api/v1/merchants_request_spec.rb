@@ -42,4 +42,20 @@ describe 'Merchants API' do
     merchants = JSON.parse(response.body, symbolize_names: true)
     expect(merchants[:data].count).to eq(10)
   end
+
+  it 'can send the correct amount of results based on the per page perameter' do
+    create_list(:merchant, 55)
+    get '/api/v1/merchants', params:{per_page: 50}
+    merchants = JSON.parse(response.body, symbolize_names: true)
+    expect(merchants[:data].count).to eq(50)
+  end
+
+  it 'sends an empty array if no data is availible' do
+    get '/api/v1/merchants'
+    expect(response).to be_successful
+    merchants = JSON.parse(response.body, symbolize_names: true)
+    expect(merchants[:data].count).to eq(0)
+    expect(merchants[:data]).to be_a(Array)
+    expect(merchants[:data]).to eq([])
+  end
 end
