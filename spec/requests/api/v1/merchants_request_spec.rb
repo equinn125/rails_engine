@@ -58,4 +58,26 @@ describe 'Merchants API' do
     expect(merchants[:data]).to be_a(Array)
     expect(merchants[:data]).to eq([])
   end
+
+  describe 'merchant show request' do
+    it 'can get one merchant by its id' do
+      id = create(:merchant).id
+      get "/api/v1/merchants/#{id}"
+      merchant= JSON.parse(response.body, symbolize_names: true)
+      expect(response).to be_successful
+
+      expect(merchant[:data]).to be_a(Hash)
+      expect(merchant[:data]).to have_key(:id)
+      expect(merchant[:data][:id]).to be_a(String)
+      expect(merchant[:data][:type]).to eq('merchant')
+      expect(merchant[:data]).to have_key(:attributes)
+      expect(merchant[:data][:attributes]).to be_a(Hash)
+    end
+
+    it 'has a 404 error message if id is bad' do
+    merchant = create(:merchant)
+      get "/api/v1/merchants/2"
+      expect(response.status).to eq(404)
+    end
+  end
 end
