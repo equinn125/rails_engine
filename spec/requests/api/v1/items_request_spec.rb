@@ -123,4 +123,34 @@ describe 'Items API' do
       expect(item[:data][:attributes]).to_not have_key(:fregrance)
     end
   end
+
+  describe 'update item endpoint' do
+    it 'updates an existing item' do
+      merchant = create(:merchant)
+      id = create(:item, merchant_id: merchant.id).id
+      previous_name = Item.last.name
+      item_params = {name: 'curl shampoo'}
+
+      patch "/api/v1/items/#{id}", params: {item: item_params}
+      item = Item.find_by(id: id)
+      expect(response).to be_successful
+      expect(response.status).to eq(200)
+      expect(item.name).to_not eq(previous_name)
+      expect(item.name).to eq('curl shampoo')
+    end
+
+    it 'sends a 404 error if id is not found' do
+      item_params = {name: 'curl shampoo'}
+      patch "/api/v1/items/1", params: {item: item_params}
+      expect(response.status).to eq(404)
+    end
+
+    it 'sends an error if merchant id is not found' do
+      id = create(:item).id
+      previous_name = Item.last.name
+      item_params = {merchant_id: 0}
+      patch "/api/v1/items/#{id}", params: {item: item_params}
+      expect(response.status).to eq(404)
+    end
+  end
 end
