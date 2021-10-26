@@ -153,4 +153,15 @@ describe 'Items API' do
       expect(response.status).to eq(404)
     end
   end
+
+  describe 'delete item endpoint' do
+    it 'can destroy an item' do
+      merchant = create(:merchant)
+      id = create(:item, merchant_id: merchant.id).id
+      expect(Item.count).to eq(1)
+      delete "/api/v1/items/#{id}"
+      expect(response).to be_successful
+      expect(Item.count).to eq(0)
+    end
+  end
 end
