@@ -75,9 +75,52 @@ describe 'Items API' do
     end
 
     it 'has a 404 error message if id is bad' do
-    merchant = create(:item)
+      create(:item)
       get "/api/v1/items/2"
       expect(response.status).to eq(404)
+    end
+  end
+
+  describe 'item create request' do
+    it 'can create a new item-happy path' do
+      merchant = create(:merchant)
+      item_params =({ name: 'shampoo', description: 'shampoo for curly hair', unit_price: 5.99, merchant_id: merchant.id})
+
+      post "/api/v1/items", params:{item: item_params}
+      item = JSON.parse(response.body, symbolize_names: true)
+    expect(response).to be_successful
+    expect(response.status).to be(201)
+    expect(item[:data]).to be_a(Hash)
+    expect(item[:data]).to have_key(:id)
+    expect(item[:data][:id]).to be_a(String)
+    expect(item[:data][:type]).to eq('item')
+    expect(item[:data]).to have_key(:attributes)
+    expect(item[:data][:attributes]).to be_a(Hash)
+    end
+
+    it 'raises an error if missing an attribute in the request' do
+      merchant = create(:merchant)
+      item_params =({ name: 'shampoo', unit_price: 5.99, merchant_id: merchant.id})
+      post "/api/v1/items", params:{item: item_params}
+      item = JSON.parse(response.body, symbolize_names: true)
+      expect(response.status).to eq(400)
+    end
+
+    it 'ignores attributes that are not required' do
+      merchant = create(:merchant)
+      item_params = { name: 'conditioner', description: 'conditioner for curly hair',unit_price: 5.99, merchant_id: merchant.id, fregrance: 'coconut'}
+
+      post "/api/v1/items",params: {item: item_params}
+      item = JSON.parse(response.body, symbolize_names: true)
+      expect(response).to be_successful
+      expect(response.status).to be(201)
+      expect(item[:data]).to be_a(Hash)
+      expect(item[:data]).to have_key(:id)
+      expect(item[:data][:id]).to be_a(String)
+      expect(item[:data][:type]).to eq('item')
+      expect(item[:data]).to have_key(:attributes)
+      expect(item[:data][:attributes]).to be_a(Hash)
+      expect(item[:data][:attributes]).to_not have_key(:fregrance)
     end
   end
 end
