@@ -47,7 +47,7 @@ class Api::V1::ItemsController < ApplicationController
       item = Item.find_all_prices(params[:min_price], params[:max_price])
       render json: ItemSerializer.new(item.first)
       else
-      render json: { }
+      render json: { data: {} }
       end
     end
 
