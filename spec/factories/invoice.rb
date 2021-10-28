@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :invoice, class: Invoice do
-    status { ['cancelled', 'completed', 'in progress'].sample }
+    status { 'shipped' }
   end
 end

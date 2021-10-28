@@ -47,4 +47,19 @@ describe 'Find Item API endpoint' do
     expect(response).to be_successful
     expect(item[:data]).to be_a Hash
   end
+
+  it 'has a sad bath if both name and price params are used' do
+    get "/api/v1/items/find?name=shamp&max_price=7"
+    expect(response.status).to eq(400)
+  end
+
+  it 'has a sad path if max price is less than 0' do
+    get "/api/v1/items/find?max_price=-7"
+    expect(response.status).to eq(400)
+  end
+
+  it 'has a sad path if min price is less than 0' do
+    get "/api/v1/items/find?min_price=-7"
+    expect(response.status).to eq(400)
+  end
 end
