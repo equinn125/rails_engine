@@ -22,4 +22,12 @@ class Api::V1::MerchantsController < ApplicationController
     end
   end
 
+  def most_items
+    if params[:quantity]
+      merchants = Merchant.most_merchant_items(params[:quantity])
+    render json: MostItemsSerializer.most_items(merchants)
+    else
+      render json: {error: "bad_request"}, status: 400
+    end
+  end
 end
