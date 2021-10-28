@@ -23,12 +23,13 @@ class Item < ApplicationRecord
   def self.find_item_name(params)
     where("name ILIKE ?", "%#{params}%")
   end
-  #
-  # def self.find_by_min(price_params)
-  #   where("unit_price >= ?", price_params[:min_params].to_f)
-  # end
-  #
-  # def self.find_by_max(price_params)
-  #   where("unit_price <= ?", price_params[:max_params].to_f)
-  # end
+
+  def self.revenue_ranking(qty =10)
+    joins(invoice_items: {invoice: :transactions})
+    .select("items.*, SUM(invoice_items.unit_price * invoice_items.quantity) AS revenue")
+    .where("transactions.result = ?", "success")
+    .group("items.id")
+    .order("revenue desc")
+    .limit(qty)
+  end
 end

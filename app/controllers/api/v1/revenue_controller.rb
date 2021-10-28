@@ -16,4 +16,16 @@ class Api::V1::RevenueController < ApplicationController
       render json: {error: "bad_request"}, status: 400
     end
   end
+
+  def item_revenue
+    if !params[:quantity]
+        items = Item.revenue_ranking
+      render json: RevenueSerializer.top_item(items)
+    elsif params[:quantity].to_i > 0
+      items = Item.revenue_ranking(params[:quantity])
+    render json: RevenueSerializer.top_item(items)
+    else
+      render json: {error: "bad_request"}, status: 400
+    end
+  end
 end
