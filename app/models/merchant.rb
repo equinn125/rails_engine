@@ -10,6 +10,7 @@ class Merchant < ApplicationRecord
     joins(items: {invoice_items: {invoice: :transactions}})
     .select("merchants.*, SUM(invoice_items.unit_price * invoice_items.quantity) AS revenue")
     .where("transactions.result = ? AND merchants.id = ?", "success",merchant_id)
+    .where("invoices.status = ?", "shipped")
     .group("merchants.id")
     .first
   end
@@ -18,6 +19,7 @@ class Merchant < ApplicationRecord
     joins(items: {invoice_items: {invoice: :transactions}})
     .select("merchants.*, SUM(invoice_items.unit_price * invoice_items.quantity) AS revenue")
     .where("transactions.result = ?", "success")
+    .where("invoices.status = ?", "shipped")
     .group("merchants.id")
     .order("revenue desc")
     .limit(quantity)
@@ -27,6 +29,7 @@ class Merchant < ApplicationRecord
     joins(items: {invoice_items: {invoice: :transactions}})
     .select("merchants.*, SUM(invoice_items.quantity) AS amount")
     .where("transactions.result = ?", "success")
+    .where("invoices.status = ?", "shipped")
     .group("merchants.id")
     .order("amount desc")
     .limit(quantity)

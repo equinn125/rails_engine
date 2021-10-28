@@ -10,6 +10,8 @@ Rails.application.routes.draw do
       get 'merchants/most_items', to: 'merchants#most_items'
       resources :merchants, only: [:index, :show]
       resources :items
+      get 'merchants/:id/items', to: 'merchant_items#index'
+      get 'items/:id/merchant',to: 'items_merchant#show'
     end
   end
 end
