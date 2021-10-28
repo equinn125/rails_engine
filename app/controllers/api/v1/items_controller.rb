@@ -38,25 +38,20 @@ class Api::V1::ItemsController < ApplicationController
     end
 
     def find
-      if params[:name] && price?
-        render json: '{"error": "bad_request"}', status: 400
-      elsif params[:name]
+      if params[:name] && !price?
         item = Item.find_item_name(params[:name])
         render json: ItemSerializer.new(item.first)
-      elsif price?
+      elsif price? && !params[:name]
       item = Item.find_all_prices(params[:min_price], params[:max_price])
       render json: ItemSerializer.new(item.first)
       else
-      render json: { data: {} }
+        render json: '{"error": "bad_request"}', status: 400
       end
     end
 
   private
   def item_params
     params.require(:item).permit(:name, :description, :unit_price, :merchant_id)
-  end
-  def price_params
-    params.permit(:min_price, :max_price)
   end
   def price?
     params[:min_price] || params[:max_price]
