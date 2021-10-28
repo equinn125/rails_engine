@@ -153,4 +153,41 @@ describe 'Revenue API endpoint' do
       expect(response.status).to eq(400)
     end
   end
+
+  it 'sends 10 items if nothing is specified' do
+    merchant_1 =  create(:merchant, name: 'Krusty Krab')
+    customer =  create(:customer)
+    invoice_1 =  create(:invoice, customer_id: customer.id, merchant_id: merchant_1.id )
+    invoice_2 =  create(:invoice, customer_id: customer.id, merchant_id: merchant_1.id )
+    invoice_3 =  create(:invoice, customer_id: customer.id, merchant_id: merchant_1.id )
+    item_1 = create(:item, name: "New shirt", description: "ugly shirt", unit_price: 1400, merchant_id: merchant_1.id)
+    item_2 = create(:item, name: "Old shirt", description: "moderately ugly shirt", unit_price: 1200, merchant_id: merchant_1.id)
+    item_3 = create(:item, name: "Blue Shirt", description: "a shirt that is blue", unit_price: 1100, merchant_id: merchant_1.id)
+    item_4 = create(:item, name: "green shirt", description: "a shirt, tht is green", unit_price: 1000, merchant_id: merchant_1.id)
+    item_5 = create(:item, name: "yellow shirt", description: "its a shirt and it is yellow", unit_price: 1000, merchant_id: merchant_1.id)
+    item_6 = create(:item, name: "black shirt", description: "its a shirt and it is yellow", unit_price: 1000, merchant_id: merchant_1.id)
+    item_7 = create(:item, name: "white shirt", description: "its a shirt and it is yellow", unit_price: 1000, merchant_id: merchant_1.id)
+    item_8 = create(:item, name: "grey shirt", description: "its a shirt and it is yellow", unit_price: 1000, merchant_id: merchant_1.id)
+    item_9 = create(:item, name: "red shirt", description: "its a shirt and it is yellow", unit_price: 1000, merchant_id: merchant_1.id)
+    item_10 = create(:item, name: "a shirt", description: "its a shirt and it is yellow", unit_price: 1000, merchant_id: merchant_1.id)
+    item_11 = create(:item, name: "the shirt", description: "its a shirt and it is yellow", unit_price: 1000, merchant_id: merchant_1.id)
+    invoice_item1 = create(:invoice_item, item_id: item_1.id, invoice_id: invoice_1.id, quantity: 5, unit_price: 1200)
+    invoice_item2 = create(:invoice_item,item_id: item_2.id, invoice_id: invoice_1.id, quantity: 10, unit_price: 1000)
+    invoice_item3 = create(:invoice_item,item_id: item_3.id, invoice_id: invoice_2.id, quantity: 15, unit_price: 1100)
+    invoice_item4 = create(:invoice_item,item_id: item_4.id, invoice_id: invoice_2.id, quantity: 10, unit_price: 1300)
+    invoice_item5 = create(:invoice_item,item_id: item_5.id, invoice_id: invoice_3.id, quantity: 5, unit_price: 1000)
+    invoice_item6 = create(:invoice_item,item_id: item_6.id, invoice_id: invoice_3.id, quantity: 5, unit_price: 1000)
+    invoice_item7 = create(:invoice_item,item_id: item_7.id, invoice_id: invoice_3.id, quantity: 5, unit_price: 1000)
+    invoice_item8 = create(:invoice_item,item_id: item_8.id, invoice_id: invoice_3.id, quantity: 5, unit_price: 1000)
+    invoice_item9 = create(:invoice_item,item_id: item_9.id, invoice_id: invoice_3.id, quantity: 5, unit_price: 1000)
+    invoice_item10 = create(:invoice_item,item_id: item_10.id, invoice_id: invoice_3.id, quantity: 5, unit_price: 1000)
+    invoice_item11 = create(:invoice_item,item_id: item_11.id, invoice_id: invoice_3.id, quantity: 5, unit_price: 1000)
+    transaction_1 = create(:transaction, invoice_id: invoice_1.id, result: "success")
+    transaction_2 = create(:transaction, invoice_id: invoice_2.id, result: "success")
+    transaction_3 = create(:transaction, invoice_id: invoice_3.id, result: "success")
+    get "/api/v1/revenue/items"
+    expect(response).to be_successful
+    items = JSON.parse(response.body, symbolize_names: true)
+    expect(items[:data].count).to eq(10)
+  end
 end
