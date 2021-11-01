@@ -14,8 +14,11 @@ Rails engine is a e-commerce Rails based API based off of (Little Esty Shop Data
 
 
 ## API Endpoints
-HTTP	Route	Description
-GET	/api/v1/merchants	Get all merchants (default 20 per page)
+|HTTP |Route| Description|
+| ----| ------------------|------------|
+| GET | /api/v1/merchants | Get all merchants (default 20 per page)|
+
+
 
 * System dependencies
 
