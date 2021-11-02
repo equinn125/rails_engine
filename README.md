@@ -53,10 +53,12 @@ Rails engine is a e-commerce Rails based API based off of (Little Esty Shop Data
 1. Fork this repository
 2. Clone your fork
 3. From the command line, install gems and set up your DB:
-4.bundle install
-5.rails db:{drop,create,migrate, seed}
-6.rails db:schema:dump
-7.Run the test suite with bundle exec rspec.
-8.Run your development server with rails s to see the API app in action.
+
+```bundle install ```
+```rails db:{drop,create,migrate, seed} ```
+```rails db:schema:dump```
+
+4.Run the test suite with bundle exec rspec.
+5.Run your development server with rails s to see the API app in action.
 
 
