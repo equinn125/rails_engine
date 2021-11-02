@@ -37,3 +37,26 @@ Rails engine is a e-commerce Rails based API based off of (Little Esty Shop Data
 | GET | /api/v1/revenue/merchants/id|Get revenue for a merchant by id|
 | GET | /api/v1/revenue/items?quantity=number|Get x amount of items by most revenue|
 
+## Technologies Used
+  - Ruby on Rails 5.26
+  - Ruby 2.72.
+  - Travis CI
+  - Postman
+  - PostgreSQL
+  - Postico
+  - Github
+  - Git
+  - RSpec
+
+## Setup
+
+1. Fork this repository
+2. Clone your fork
+3. From the command line, install gems and set up your DB:
+4.bundle install
+5.rails db:{drop,create,migrate, seed}
+6.rails db:schema:dump
+7.Run the test suite with bundle exec rspec.
+8.Run your development server with rails s to see the API app in action.
+
+
